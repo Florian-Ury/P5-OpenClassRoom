@@ -129,8 +129,15 @@ if (email) {
 
  //Event pour envoyer les info personnels
  document.querySelector('#order').addEventListener('click', function (event) {
-     event.preventDefault()
-     let personnalData = {
+     // changer par un event "submit" sur le formulaire
+  
+     // stoppe le comportement par défaut du form
+     event.preventDefault();
+  
+     // test si le form et les datas sont valies
+     if (formIsValid() == true) {
+          
+        let personnalData = {
          contact : {
              firstName : firstName.value,
              lastName : lastName.value,
@@ -139,11 +146,9 @@ if (email) {
              email : email.value
          },
          products : stockOrder,
-         orderId : Math.floor(Math.random() * 50000)
-     }
-     if (personnalData.contact.firstName !== "" || personnalData.contact.lastName !== "" ||
-         personnalData.contact.address !== "" ||personnalData.contact.city !== "" ||
-         personnalData.contact.email !== "") {
+         orderId : Math.floor(Math.random() * 50000) // autre option utliser date/heure/seconde
+       }
+      
          //Le fetch avec la méthode POST, qui accpete les .json, le body avec notre personnalData en Json
          fetch('http://localhost:3000/api/products/order', {
              method: 'POST',
