@@ -1,6 +1,7 @@
- // Vérification si l'objet existe
+// Vérification si l'objet existe
  if (stockOrder) {
-
+    let arrayPrice = new Object();
+    let total = 0
      //Pour chaque objet je vais les afficher avec le nom, la couleur, l'image, le prix et la quantité
      stockOrder.forEach(function (a) {
 
@@ -11,6 +12,7 @@
                  return response.json();
              }
          }).then(function (product){
+                    arrayPrice[a.id] = product.price
                     document.querySelector('#cart__items').innerHTML += `
                        <article class="cart__item" data-id="${a.id}" data-color="${a.color}">
                         <div class="cart__item__img">
@@ -36,12 +38,15 @@
                     `
 
 
+            total += parseInt(a.quantity)*parseInt(product.price)
+            console.log(total)
+            document.getElementById('totalPrice').innerText = total
+
             // Sélectionner les quantités / modifier la valeur et l'envoyer à la fonction updateToStockOrder
             let selectQuantity = document.querySelectorAll('.itemQuantity')
 
             Array.from(selectQuantity).forEach(function (item) {
                 item.addEventListener("change", function (e) {
-                    console.log(e)
                     let article = item.closest('article')
                     let personnalId = {
                         id : article.dataset.id,
@@ -51,7 +56,9 @@
                     }
                     let elementQuantity = this.previousElementSibling
 
-                    updateToStockOrder(personnalId, elementQuantity)
+
+                    console.log(divElement.closest(".cart__item__content__description"))
+                    updateToStockOrder(personnalId, elementQuantity, arrayPrice)
 
                 })
             })
@@ -70,9 +77,10 @@
                     article.style.display = "none";
                 })
             })
-
+         console.log(total)
          })
      })
+
  } else {
      //Si aucun objet est trouvé on fait une alert
      alert('Aucune page trouvé')
@@ -121,7 +129,7 @@ if (email) {
 
  //Event pour envoyer les info personnels
  document.querySelector('#order').addEventListener('click', function (event) {
-
+     event.preventDefault()
      let personnalData = {
          contact : {
              firstName : firstName.value,
@@ -151,7 +159,7 @@ if (email) {
              })
              .then(function (data){
 
-                 document.location.href = `./confirmation.html?id=${personnalData.orderId}`;
+                 // document.location.href = `./confirmation.html?id=${personnalData.orderId}`;
              })
      }
  })

@@ -1,13 +1,17 @@
 //stock order est le tableau json qui détient notre Localstorage
 let stockOrder = []
 let totalQuantity = 0
+
+const showTotal = (totalQuantity) => {
+    let showTotalQuantity = document.querySelector('#totalQuantity').innerHTML = totalQuantity
+}
 if (localStorage.getItem("Command") !== null && localStorage.getItem("Command") !== 'null') {
     stockOrder = JSON.parse(localStorage.getItem("Command"))
 
     for(let i = 0; i < stockOrder.length; i++) {
         totalQuantity += parseInt(stockOrder[i].quantity)
     }
-    console.log(totalQuantity)
+    showTotal(totalQuantity)
 }
 
 //fonction pour sauvegarder le localstorage
@@ -16,8 +20,8 @@ const saveStorage = (stockOrder) => {
 }
 
 //fonction pour modifier le stockorder en ajoutant des produits / modifiant la quantité
-const updateToStockOrder = (order, targetDiv) => {
-    totalQuantity += order.quantity
+const updateToStockOrder = (order, targetDiv, arrayPrice) => {
+    totalQuantity += parseInt(order.quantity)
     let exist = 0
     let newQuantity = 0
     for(let i = 0; i < stockOrder.length; i++) {
@@ -32,10 +36,13 @@ const updateToStockOrder = (order, targetDiv) => {
         newQuantity = order.quantity
     }
     saveStorage(stockOrder)
-//    showTotal(targetDiv, newQuantity)
+    showQuantity(targetDiv, newQuantity)
+    showTotal(totalQuantity)
 }
 
-
+const showQuantity = (targetDiv, newQuantity) => {
+    targetDiv.innerHTML = `Qté : ${newQuantity}`
+}
 //on supprime l'élement voulu du stockorder puis on sauvegarde
 const removeToStockOrder = (personnalId) => {
 
