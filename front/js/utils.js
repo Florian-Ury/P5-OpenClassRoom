@@ -5,6 +5,10 @@ let totalQuantity = 0
 const showTotal = (totalQuantity) => {
     let showTotalQuantity = document.querySelector('#totalQuantity').innerHTML = totalQuantity
 }
+const showTotalprice = (totalPrice) => {
+    let showTotalPrice = document.getElementById('totalPrice').innerText = totalPrice
+}
+
 if (localStorage.getItem("Command") !== null && localStorage.getItem("Command") !== 'null') {
     stockOrder = JSON.parse(localStorage.getItem("Command"))
 
@@ -20,10 +24,13 @@ const saveStorage = (stockOrder) => {
 }
 
 //fonction pour modifier le stockorder en ajoutant des produits / modifiant la quantité
-const updateToStockOrder = (order, targetDiv, arrayPrice) => {
+const updateToStockOrder = (order, targetDiv, priceUnity, total) => {
     totalQuantity += parseInt(order.quantity)
+    let totalPriceUpdate =+ total
+    console.log(totalPriceUpdate)
     let exist = 0
     let newQuantity = 0
+    let currentPrice = 0
     for(let i = 0; i < stockOrder.length; i++) {
         if (order.personnalId === stockOrder[i].personnalId) {
             stockOrder[i].quantity = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
@@ -35,9 +42,15 @@ const updateToStockOrder = (order, targetDiv, arrayPrice) => {
         stockOrder.push(order)
         newQuantity = order.quantity
     }
+
+    currentPrice = parseInt(priceUnity)*parseInt(order.quantity)
+    totalPriceUpdate=total+currentPrice
+    console.log(totalPriceUpdate)
     saveStorage(stockOrder)
     showQuantity(targetDiv, newQuantity)
     showTotal(totalQuantity)
+    console.log(totalPriceUpdate)
+    showTotalprice(totalPriceUpdate)
 }
 
 const showQuantity = (targetDiv, newQuantity) => {

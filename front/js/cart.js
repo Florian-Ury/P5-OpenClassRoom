@@ -27,7 +27,7 @@
                           <div class="cart__item__content__settings">
                             <div class="cart__item__content__settings__quantity">
                               <p>Qté : ${a.quantity} </p>
-                              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="">
+                              <input type="number" class="itemQuantity" name="itemQuantity" min="-100" max="100" value="0">
                             </div>
                             <div class="cart__item__content__settings__delete">
                               <p class="deleteItem">Supprimer</p>
@@ -37,10 +37,9 @@
                       </article>
                     `
 
-
             total += parseInt(a.quantity)*parseInt(product.price)
             console.log(total)
-            document.getElementById('totalPrice').innerText = total
+            showTotalprice(total)
 
             // Sélectionner les quantités / modifier la valeur et l'envoyer à la fonction updateToStockOrder
             let selectQuantity = document.querySelectorAll('.itemQuantity')
@@ -55,10 +54,12 @@
                         personnalId : article.dataset.id+article.dataset.color
                     }
                     let elementQuantity = this.previousElementSibling
+                    let elementPrice = this.parentNode.parentNode.parentNode.firstElementChild.lastElementChild.innerHTML
+                    let regex = new RegExp('["€"]')
+                    let replacePrice = elementPrice.replace(regex, '')
+                    console.log(total)
 
-
-                    console.log(divElement.closest(".cart__item__content__description"))
-                    updateToStockOrder(personnalId, elementQuantity, arrayPrice)
+                    updateToStockOrder(personnalId, elementQuantity, replacePrice, total)
 
                 })
             })
@@ -124,26 +125,31 @@ if (email) {
     validForm(email, regexEmail, textError)
 }
 
+const validIsForm = () => {
+    if (firstName.value !== "" && lastName.value !== "" && address.value !== "" && city.value !== "" && email.value !== "") {
+        if (!regexName.test(firstName.value) && !regexName.test(lastName.value) && !regexAddress.test(address.value) && !regexName.test(city.value) && !regexEmail.test(email.value) ) {
+            return true
+        }
+    }
+}
 
 
-
- //Event pour envoyer les info personnels
- document.querySelector('#order').addEventListener('click', function (event) {
+ //Event pour envoyer les infos personnelles
+ document.querySelector('.cart__order__form').addEventListener('submit', function (event) {
      event.preventDefault()
-     let personnalData = {
-         contact : {
-             firstName : firstName.value,
-             lastName : lastName.value,
-             address : address.value,
-             city : city.value,
-             email : email.value
-         },
-         products : stockOrder,
-         orderId : Math.floor(Math.random() * 50000)
-     }
-     if (personnalData.contact.firstName !== "" || personnalData.contact.lastName !== "" ||
-         personnalData.contact.address !== "" ||personnalData.contact.city !== "" ||
-         personnalData.contact.email !== "") {
+
+     if (validIsForm() === true) {
+         let personnalData = {
+             contact : {
+                 firstName : firstName.value,
+                 lastName : lastName.value,
+                 address : address.value,
+                 city : city.value,
+                 email : email.value,
+             },
+             products : stockOrder,
+         }
+            console.log(personnalData)
          //Le fetch avec la méthode POST, qui accpete les .json, le body avec notre personnalData en Json
          fetch('http://localhost:3000/api/products/order', {
              method: 'POST',
@@ -154,13 +160,7 @@ if (email) {
              body: JSON.stringify(personnalData),
              cache: "default",
          })
-             .then(function(response) {
-                 return response.json();
-             })
-             .then(function (data){
-
-                 // document.location.href = `./confirmation.html?id=${personnalData.orderId}`;
-             })
+             .then((response) => response.json())
      }
  })
 
