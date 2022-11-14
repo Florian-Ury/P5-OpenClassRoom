@@ -1,5 +1,7 @@
 // Vérification si l'objet existe
  if (stockOrder) {
+
+
     let arrayPrice = new Object();
     let total = 0
      //Pour chaque objet je vais les afficher avec le nom, la couleur, l'image, le prix et la quantité
@@ -27,7 +29,7 @@
                           <div class="cart__item__content__settings">
                             <div class="cart__item__content__settings__quantity">
                               <p>Qté : ${a.quantity} </p>
-                              <input type="number" class="itemQuantity" name="itemQuantity" min="-100" max="100" value="0">
+                              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="0">
                             </div>
                             <div class="cart__item__content__settings__delete">
                               <p class="deleteItem">Supprimer</p>
@@ -37,15 +39,17 @@
                       </article>
                     `
 
-            total += parseInt(a.quantity)*parseInt(product.price)
+            total += a.quantity*product.price
             console.log(total)
-            showTotalprice(total)
+
+            showTotalPrice(total)
 
             // Sélectionner les quantités / modifier la valeur et l'envoyer à la fonction updateToStockOrder
             let selectQuantity = document.querySelectorAll('.itemQuantity')
 
             Array.from(selectQuantity).forEach(function (item) {
                 item.addEventListener("change", function (e) {
+
                     let article = item.closest('article')
                     let personnalId = {
                         id : article.dataset.id,
@@ -53,13 +57,18 @@
                         quantity : item.value,
                         personnalId : article.dataset.id+article.dataset.color
                     }
+
+                    //Variable pour récupérer les parents Prix et Quantité
                     let elementQuantity = this.previousElementSibling
                     let elementPrice = this.parentNode.parentNode.parentNode.firstElementChild.lastElementChild.innerHTML
-                    let regex = new RegExp('["€"]')
-                    let replacePrice = elementPrice.replace(regex, '')
-                    console.log(total)
 
-                    updateToStockOrder(personnalId, elementQuantity, replacePrice, total)
+                    //Regex pour supprimer les caractères inutiles
+                    let regex = new RegExp('€')
+                    let replacePrice = elementPrice.replace(regex, '')
+                    let price = parseInt(replacePrice)*item.value
+
+                    console.log(total)
+                    updateToStockOrder(personnalId, elementQuantity, price, total)
 
                 })
             })
@@ -74,11 +83,20 @@
                     let article = item.closest(':not(div):not(p)')
                     let personnalId = article.dataset.id+article.dataset.color
 
-                    removeToStockOrder(personnalId)
+                    //Variable pour récupérer les parents Prix et Quantité
+                    let elementPrice = this.parentNode.parentNode.parentNode.firstElementChild.lastElementChild.innerHTML
+                    let elementQuantity = this.parentNode.parentNode.firstElementChild.firstElementChild.innerHTML
+
+                    //Regex pour supprimer les caractères inutiles
+                    let regex = new RegExp('[a-zA-Zé€ :]+')
+                    let replacePrice = elementPrice.replace(regex, '')
+                    let replaceQty = elementQuantity.replace(regex, '')
+                    //Calcule pour avoir le prix à supprimer quand on supprime un objet
+                    let totalDel = parseInt(replacePrice)*parseInt(replaceQty)
+                    removeToStockOrder(personnalId, total, totalDel)
                     article.style.display = "none";
                 })
             })
-         console.log(total)
          })
      })
 
@@ -87,83 +105,38 @@
      alert('Aucune page trouvé')
  }
 
-// REGEX
-// Initialisation de la variable textError
-let textError = ""
 
-//Vérification des caractère
-const regexName = new RegExp('["{@&/[}{()*%$£€:;!?#,-<>~°._+1-9}]', 'g')
-const regexAddress = new RegExp('["{@#&/[}{()*%$£€:;!?+<>~°_}]', 'g')
-const regexEmail = new RegExp('["{#&/[}{()*%$£€:;!?+<>~°}]', 'g')
+//Event pour envoyer les infos personnelles
+document.querySelector('.cart__order__form').addEventListener('submit', function (event) {
+    event.preventDefault()
+    let firstName = document.getElementById('firstName')
+    let lastName = document.getElementById('lastName')
+    let address = document.getElementById('address')
+    let city = document.getElementById('city')
+    let email = document.getElementById('email')
 
-// Récupération des ID pour l'event
-let firstName = document.querySelector('#firstName')
-let lastName = document.querySelector('#lastName')
-let address = document.querySelector('#address')
-let city = document.querySelector('#city')
-let email = document.querySelector('#email')
-
-//Condition pour utiliser la fonction avec l'envoi du type, du regex et du message d'erreur
-if (firstName) {
-    textError = "Veuillez entrer un prénom valide"
-    validForm(firstName, regexName, textError)
-}
-if (lastName) {
-    textError = "Veuillez entrer un nom valide"
-    validForm(lastName, regexName, textError)
-}
-if (address){
-    textError = "Veuillez entrer une adresse valide"
-    validForm(address, regexAddress, textError)
-}
-if (city) {
-    textError = "Veuillez entrer une ville valide"
-    validForm(city, regexName, textError)
-}
-if (email) {
-    textError = "Veuillez entrer une adresse mail valide"
-    validForm(email, regexEmail, textError)
-}
-
-const validIsForm = () => {
-    if (firstName.value !== "" && lastName.value !== "" && address.value !== "" && city.value !== "" && email.value !== "") {
-        if (!regexName.test(firstName.value) && !regexName.test(lastName.value) && !regexAddress.test(address.value) && !regexName.test(city.value) && !regexEmail.test(email.value) ) {
-            return true
-        }
+    let personnalData = {
+        contact : {
+            firstName : firstName.value,
+            lastName : lastName.value,
+            address : address.value,
+            city : city.value,
+            email : email.value,
+        },
+        products : stockOrder,
     }
-}
-
-
- //Event pour envoyer les infos personnelles
- document.querySelector('.cart__order__form').addEventListener('submit', function (event) {
-     event.preventDefault()
-
-     if (validIsForm() === true) {
-         let personnalData = {
-             contact : {
-                 firstName : firstName.value,
-                 lastName : lastName.value,
-                 address : address.value,
-                 city : city.value,
-                 email : email.value,
-             },
-             products : stockOrder,
-         }
-            console.log(personnalData)
-         //Le fetch avec la méthode POST, qui accpete les .json, le body avec notre personnalData en Json
-         fetch('http://localhost:3000/api/products/order', {
-             method: 'POST',
-             headers: {
-                 Accept : "application.json",
-                 "Content-Type" : "application/json"
-             },
-             body: JSON.stringify(personnalData),
-             cache: "default",
-         })
-             .then((response) => response.json())
-     }
- })
-
+    console.log(personnalData)
+    //Le fetch avec la méthode POST, qui accepte les .json, le body avec notre personnalData en Json
+    fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        headers: {
+            Accept : "application.json",
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify(personnalData)
+    })
+        .then((response) => response.json())
+})
 
 
 

@@ -3,9 +3,13 @@ let stockOrder = []
 let totalQuantity = 0
 
 const showTotal = (totalQuantity) => {
-    let showTotalQuantity = document.querySelector('#totalQuantity').innerHTML = totalQuantity
+    let showTotalQuantity = document.querySelector('#totalQuantity')
+
+    if(showTotalQuantity) {
+        showTotalQuantity.innerHTML = totalQuantity
+    }
 }
-const showTotalprice = (totalPrice) => {
+const showTotalPrice = (totalPrice) => {
     let showTotalPrice = document.getElementById('totalPrice').innerText = totalPrice
 }
 
@@ -24,13 +28,13 @@ const saveStorage = (stockOrder) => {
 }
 
 //fonction pour modifier le stockorder en ajoutant des produits / modifiant la quantité
-const updateToStockOrder = (order, targetDiv, priceUnity, total) => {
+const updateToStockOrder = (order, targetDiv, price, total) => {
     totalQuantity += parseInt(order.quantity)
-    let totalPriceUpdate =+ total
-    console.log(totalPriceUpdate)
+    total += parseInt(price)
+
     let exist = 0
     let newQuantity = 0
-    let currentPrice = 0
+
     for(let i = 0; i < stockOrder.length; i++) {
         if (order.personnalId === stockOrder[i].personnalId) {
             stockOrder[i].quantity = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
@@ -43,41 +47,63 @@ const updateToStockOrder = (order, targetDiv, priceUnity, total) => {
         newQuantity = order.quantity
     }
 
-    currentPrice = parseInt(priceUnity)*parseInt(order.quantity)
-    totalPriceUpdate=total+currentPrice
-    console.log(totalPriceUpdate)
     saveStorage(stockOrder)
-    showQuantity(targetDiv, newQuantity)
     showTotal(totalQuantity)
-    console.log(totalPriceUpdate)
-    showTotalprice(totalPriceUpdate)
+
+
+    if(targetDiv) {
+        showQuantity(targetDiv, newQuantity)
+    }
+
+    if(total){
+        showTotalPrice(total)
+    }
 }
 
 const showQuantity = (targetDiv, newQuantity) => {
     targetDiv.innerHTML = `Qté : ${newQuantity}`
 }
 //on supprime l'élement voulu du stockorder puis on sauvegarde
-const removeToStockOrder = (personnalId) => {
-
+const removeToStockOrder = (personnalId, total, totalDel) => {
+    let newTotal = 0
     for (let i = 0; i < stockOrder.length; i++) {
 
         if (stockOrder[i].personnalId === personnalId) {
             stockOrder.splice(i, 1)
-
+            newTotal += total-totalDel
+            showTotalPrice(newTotal)
             saveStorage(stockOrder)
         }
     }
 }
-//ça vérifie le formulaire, si le type correspond au regex il n'y a pas de message d'erreur, sinon il y a un message d'erreur qui apparait en dessous
-const validForm = (type, regex, textError) =>  {
-    type.addEventListener('change', function () {
-        let typeError = type.nextElementSibling
-        if(!regex.test(type.value)) {
-            typeError.textContent = ""
-        } else {
-            typeError.textContent = textError
-        }
-    })
+
+const validEmail = (string) => {
+
+    if(string == "") return false;
+
+    let regexFunc = new RegExp('["{#&/[}{()*%$£€:;!?+<>~°}]', 'g');
+    if(!regexFunc.test(string)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
+const validText = (string, number = false) => {
 
+    if(string == "") return false;
+
+    let rule;
+    if(number == false) {
+        rule = '["{@&/[}{()*%$£€:;!?#,-<>~°._+1-9}]'; // number refused
+    } else {
+       rule = '["{@#&/[}{()*%$£€:;!?+<>~°_}]'; // number accepted
+    }
+
+    let regexFunc = new RegExp(rule, 'g');
+    if(!regexFunc.test(string)) {
+        return true;
+    } else {
+        return false;
+    }
+}
