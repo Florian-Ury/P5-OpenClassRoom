@@ -48,31 +48,51 @@ const updateToStockOrder = (order, targetDiv, price, total) => {
     }
 
     saveStorage(stockOrder)
+
+    //Afficher la quantité d'articles en temps réel
     showTotal(totalQuantity)
 
-
+    //S'il y a "targetDiv" alors on appel la fonction showQuantity
     if(targetDiv) {
         showQuantity(targetDiv, newQuantity)
     }
 
+    //S'il y a "total" on appel la fonction showTotalPrice
     if(total){
         showTotalPrice(total)
     }
+    return total
 }
 
 const showQuantity = (targetDiv, newQuantity) => {
     targetDiv.innerHTML = `Qté : ${newQuantity}`
 }
+
 //on supprime l'élement voulu du stockorder puis on sauvegarde
-const removeToStockOrder = (personnalId, total, totalDel) => {
-    let newTotal = 0
+const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
+
+    // Gérer la quantité total
+    totalQuantity -= parseInt(Qty)
+
+    // Gérer le prix total
+    total -= parseInt(totalDel)
+
     for (let i = 0; i < stockOrder.length; i++) {
 
         if (stockOrder[i].personnalId === personnalId) {
             stockOrder.splice(i, 1)
-            newTotal += total-totalDel
-            showTotalPrice(newTotal)
+
+            //Sauvegarder le storage
             saveStorage(stockOrder)
+
+            //Afficher le prix actualisé en temps réel
+            showTotalPrice(total)
+
+
+            //Afficher la quantité d'articles en temps réel
+            showTotal(totalQuantity)
+
+            return total
         }
     }
 }

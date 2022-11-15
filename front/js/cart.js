@@ -68,8 +68,8 @@
                     let price = parseInt(replacePrice)*item.value
 
                     console.log(total)
-                    updateToStockOrder(personnalId, elementQuantity, price, total)
-
+                    total = updateToStockOrder(personnalId, elementQuantity, price, total)
+                    this.value = 0
                 })
             })
 
@@ -91,9 +91,12 @@
                     let regex = new RegExp('[a-zA-Zé€ :]+')
                     let replacePrice = elementPrice.replace(regex, '')
                     let replaceQty = elementQuantity.replace(regex, '')
+
                     //Calcule pour avoir le prix à supprimer quand on supprime un objet
                     let totalDel = parseInt(replacePrice)*parseInt(replaceQty)
-                    removeToStockOrder(personnalId, total, totalDel)
+
+                    console.log(total)
+                    total = removeToStockOrder(personnalId, total, totalDel, replaceQty)
                     article.style.display = "none";
                 })
             })
@@ -109,33 +112,50 @@
 //Event pour envoyer les infos personnelles
 document.querySelector('.cart__order__form').addEventListener('submit', function (event) {
     event.preventDefault()
-    let firstName = document.getElementById('firstName')
-    let lastName = document.getElementById('lastName')
-    let address = document.getElementById('address')
-    let city = document.getElementById('city')
-    let email = document.getElementById('email')
 
-    let personnalData = {
-        contact : {
-            firstName : firstName.value,
-            lastName : lastName.value,
-            address : address.value,
-            city : city.value,
-            email : email.value,
-        },
-        products : stockOrder,
+    let productId = []
+
+    for (i = 0; i < stockOrder.length; i++){
+        console.log(stockOrder[i].id)
+        productId.push(stockOrder[i].id)
+
     }
-    console.log(personnalData)
-    //Le fetch avec la méthode POST, qui accepte les .json, le body avec notre personnalData en Json
-    fetch('http://localhost:3000/api/products/order', {
-        method: 'POST',
-        headers: {
-            Accept : "application.json",
-            "Content-Type" : "application/json"
-        },
-        body: JSON.stringify(personnalData)
-    })
-        .then((response) => response.json())
+    console.log(productId)
+
+
+    if (checkValidElement) {
+        let firstName = document.getElementById('firstName')
+        let lastName = document.getElementById('lastName')
+        let address = document.getElementById('address')
+        let city = document.getElementById('city')
+        let email = document.getElementById('email')
+
+        let personnalData = {
+            contact : {
+                firstName : firstName.value,
+                lastName : lastName.value,
+                address : address.value,
+                city : city.value,
+                email : email.value,
+            },
+            products : productId,
+        }
+        console.log(personnalData)
+        //Le fetch avec la méthode POST, qui accepte les .json, le body avec notre personnalData en Json
+        fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                Accept : "application.json",
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify(personnalData)
+        })
+            .then((response) => response.json())
+            .then(function (data) {
+                window.location.href = `confirmation.html?id=${data.orderId}`
+            })
+    }
+
 })
 
 

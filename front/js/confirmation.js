@@ -4,4 +4,4 @@ let params = (new URL(document.location)).searchParams;
 let orderId = params.get('id');
 
 //Afficher l'orderId
-document.querySelector('.orderId').innerHTML = orderId
+document.getElementById( "orderId").innerText = orderId
