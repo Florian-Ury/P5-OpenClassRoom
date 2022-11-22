@@ -1,7 +1,10 @@
-//stock order est le tableau json qui détient notre Localstorage
 let stockOrder = []
 let totalQuantity = 0
 
+/**
+ * Show Total Quantity on the cart
+ * @param totalQuantity
+ */
 const showTotal = (totalQuantity) => {
     let showTotalQuantity = document.querySelector('#totalQuantity')
 
@@ -9,6 +12,10 @@ const showTotal = (totalQuantity) => {
         showTotalQuantity.innerHTML = totalQuantity
     }
 }
+/**
+ * Show Total price on the cart
+ * @param totalPrice
+ */
 const showTotalPrice = (totalPrice) => {
     let showTotalPrice = document.getElementById('totalPrice').innerText = totalPrice
 }
@@ -22,12 +29,22 @@ if (localStorage.getItem("Command") !== null && localStorage.getItem("Command") 
     showTotal(totalQuantity)
 }
 
-//fonction pour sauvegarder le localstorage
+/**
+ * Save localStorage
+ * @param stockOrder
+ */
 const saveStorage = (stockOrder) => {
     localStorage.setItem("Command", JSON.stringify(stockOrder))
 }
 
-//fonction pour modifier le stockorder en ajoutant des produits / modifiant la quantité
+/**
+ * Update StockOrder & calling saveStorage for saving the localStorage
+ * @param order
+ * @param targetDiv
+ * @param price
+ * @param total
+ * @returns {*}
+ */
 const updateToStockOrder = (order, targetDiv, price, total) => {
     totalQuantity += parseInt(order.quantity)
     total += parseInt(price)
@@ -64,11 +81,23 @@ const updateToStockOrder = (order, targetDiv, price, total) => {
     return total
 }
 
+/**
+ * Show new quantity on the product cart
+ * @param targetDiv
+ * @param newQuantity
+ */
 const showQuantity = (targetDiv, newQuantity) => {
     targetDiv.innerHTML = `Qté : ${newQuantity}`
 }
 
-//on supprime l'élement voulu du stockorder puis on sauvegarde
+/**
+ * Remove from stockOrder with personnalId
+ * @param personnalId
+ * @param total
+ * @param totalDel
+ * @param Qty
+ * @returns {*}
+ */
 const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
 
     // Gérer la quantité total
@@ -97,6 +126,11 @@ const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
     }
 }
 
+/**
+ * check if value of email of form is validated
+ * @param string
+ * @returns {boolean}
+ */
 const validEmail = (string) => {
 
     if(string == "") return false;
@@ -109,6 +143,12 @@ const validEmail = (string) => {
     }
 }
 
+/**
+ * check if value of text of form is validated
+ * @param string
+ * @param number
+ * @returns {boolean}
+ */
 const validText = (string, number = false) => {
 
     if(string == "") return false;

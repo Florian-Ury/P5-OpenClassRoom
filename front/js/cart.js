@@ -1,8 +1,7 @@
-// Vérification si l'objet existe
  if (stockOrder) {
     let arrayPrice = new Object();
     let total = 0
-     //Pour chaque objet je vais les afficher avec le nom, la couleur, l'image, le prix et la quantité
+
      stockOrder.forEach(function (a) {
 
         fetch(`http://localhost:3000/api/products/${a.id}`)
@@ -41,7 +40,7 @@
 
             showTotalPrice(total)
 
-            // Sélectionner les quantités / modifier la valeur et l'envoyer à la fonction updateToStockOrder
+            // Select quantity & send it to updateToStockOrder
             let selectQuantity = document.querySelectorAll('.itemQuantity')
 
             Array.from(selectQuantity).forEach(function (item) {
@@ -55,11 +54,9 @@
                         personnalId : article.dataset.id+article.dataset.color
                     }
 
-                    //Variable pour récupérer les parents Prix et Quantité
                     let elementQuantity = this.previousElementSibling
                     let elementPrice = this.parentNode.parentNode.parentNode.firstElementChild.lastElementChild.innerHTML
 
-                    //Regex pour supprimer les caractères inutiles
                     let regex = new RegExp('€')
                     let replacePrice = elementPrice.replace(regex, '')
                     let price = parseInt(replacePrice)*item.value
@@ -70,7 +67,7 @@
                 })
             })
 
-            // Sélectionner le produit que l'on souhaite supprimer et appeler la fonction removeToStockOrder
+            // Select the product & send it to removeToStockOrder
             let selectProduct = document.querySelectorAll(".deleteItem")
 
             selectProduct.forEach(function (item){
@@ -78,16 +75,13 @@
                     let article = item.closest(':not(div):not(p)')
                     let personnalId = article.dataset.id+article.dataset.color
 
-                    //Variable pour récupérer les parents Prix et Quantité
                     let elementPrice = this.parentNode.parentNode.parentNode.firstElementChild.lastElementChild.innerHTML
                     let elementQuantity = this.parentNode.parentNode.firstElementChild.firstElementChild.innerHTML
 
-                    //Regex pour supprimer les caractères inutiles
                     let regex = new RegExp('[a-zA-Zé€ :]+')
                     let replacePrice = elementPrice.replace(regex, '')
                     let replaceQty = elementQuantity.replace(regex, '')
 
-                    //Calcule pour avoir le prix à supprimer quand on supprime un objet
                     let totalDel = parseInt(replacePrice)*parseInt(replaceQty)
 
                     total = removeToStockOrder(personnalId, total, totalDel, replaceQty)
@@ -102,8 +96,7 @@
      alert('Aucune page trouvé')
  }
 
-
-//Event pour envoyer les infos personnelles
+//Event for send the personnal data
 document.querySelector('.cart__order__form').addEventListener('submit', function (event) {
     event.preventDefault()
 
@@ -132,8 +125,6 @@ document.querySelector('.cart__order__form').addEventListener('submit', function
             },
             products : productId,
         }
-        console.log(personnalData)
-        //Le fetch avec la méthode POST, qui accepte les .json, le body avec notre personnalData en Json
         fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
             headers: {
@@ -149,7 +140,6 @@ document.querySelector('.cart__order__form').addEventListener('submit', function
                 saveStorage(stockOrder)
             })
     }
-
 })
 
 

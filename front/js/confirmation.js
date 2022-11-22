@@ -1,7 +1,7 @@
-//Récupérer l'orderId dans l'url
+//get "OrderId" by the url
 
 let params = (new URL(document.location)).searchParams;
 let orderId = params.get('id');
 
-//Afficher l'orderId
+//Show the orderId
 document.getElementById( "orderId").innerText = orderId
