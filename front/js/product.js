@@ -1,10 +1,10 @@
-// récupération de l'id de l'url
+// get "Id" from url
 
 let params = (new URL(document.location)).searchParams;
 let id = params.get('id');
 
 
-// Récupération des produits
+// Data recovery from api
 fetch(`http://localhost:3000/api/products/${id}`)
     .then(function(response) {
         if (response.ok) {
@@ -14,12 +14,9 @@ fetch(`http://localhost:3000/api/products/${id}`)
     .then(function(value) {
 
                 document.querySelector('title').innerHTML = value.name
-            // vérification si l'id de l'url correspond à l'id d'un article
 
-                //Appel de la fonction pour configurer la page avec le produit
                 updateProduct(value)
 
-                //Evenement pour appeler la fonction ajouter au panier
                 document.getElementById("addToCart").addEventListener("click", function (e) {
                     const order = {
                         color: document.querySelector('#colors').value,
@@ -38,8 +35,11 @@ fetch(`http://localhost:3000/api/products/${id}`)
                 })
 
     });
-    // Fonction pour modifier le contenu de la page par le produits selectionner
-    const updateProduct = function (value) {
+/**
+ * Show selected product
+ * @param value
+ */
+const updateProduct = function (value) {
         document.querySelector('.item').innerHTML = `
                 <section class="item">
                   <article>
@@ -79,7 +79,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
                     </div>
                   </article>
                 </section>`
-        // boucle pour ajouter les couleurs au menu
+        // Add color to menu
         for (let i = 0; i < value.colors.length; i++) {
             document.querySelector("#colors").innerHTML += `
                      <option value="${value.colors[i]}">${value.colors[i]}</option>`

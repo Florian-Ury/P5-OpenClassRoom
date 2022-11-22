@@ -1,5 +1,5 @@
 
-//Récupération des données de l'API
+//Data recovery from API
 const products = fetch("http://localhost:3000/api/products")
     .then(function(response) {
     if (response.ok) {
@@ -7,7 +7,7 @@ const products = fetch("http://localhost:3000/api/products")
     }
 })
     .then(function(value) {
-        //Modification de la page pour afficher tout les produits récupéré depuis l'API
+        //Show all products get by API
         let html = "";
         for (const product of value) {
 
