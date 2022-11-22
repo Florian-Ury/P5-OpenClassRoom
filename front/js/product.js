@@ -33,10 +33,8 @@ fetch(`http://localhost:3000/api/products/${id}`)
                         alert("Veuillez selectionner une couleur")
                     } else {
                         updateToStockOrder(order);
+                        alert("le produit à été ajouté au panier")
                     }
-
-
-
                 })
 
     });

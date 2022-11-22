@@ -112,7 +112,7 @@ const validEmail = (string) => {
 const validText = (string, number = false) => {
 
     if(string == "") return false;
-
+    if(string.length < 4) return false;
     let rule;
     if(number == false) {
         rule = '["{@&/[}{()*%$£€:;!?#,-<>~°._+1-9}]'; // number refused

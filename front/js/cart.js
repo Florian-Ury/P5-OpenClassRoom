@@ -1,12 +1,9 @@
 // Vérification si l'objet existe
  if (stockOrder) {
-
-
     let arrayPrice = new Object();
     let total = 0
      //Pour chaque objet je vais les afficher avec le nom, la couleur, l'image, le prix et la quantité
      stockOrder.forEach(function (a) {
-
 
         fetch(`http://localhost:3000/api/products/${a.id}`)
             .then(function(response) {
@@ -29,7 +26,7 @@
                           <div class="cart__item__content__settings">
                             <div class="cart__item__content__settings__quantity">
                               <p>Qté : ${a.quantity} </p>
-                              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="0">
+                              <input type="number" class="itemQuantity" name="itemQuantity" min="-100" max="100" value="0">
                             </div>
                             <div class="cart__item__content__settings__delete">
                               <p class="deleteItem">Supprimer</p>
@@ -73,8 +70,6 @@
                 })
             })
 
-
-
             // Sélectionner le produit que l'on souhaite supprimer et appeler la fonction removeToStockOrder
             let selectProduct = document.querySelectorAll(".deleteItem")
 
@@ -95,7 +90,6 @@
                     //Calcule pour avoir le prix à supprimer quand on supprime un objet
                     let totalDel = parseInt(replacePrice)*parseInt(replaceQty)
 
-                    console.log(total)
                     total = removeToStockOrder(personnalId, total, totalDel, replaceQty)
                     article.style.display = "none";
                 })
@@ -120,8 +114,6 @@ document.querySelector('.cart__order__form').addEventListener('submit', function
         productId.push(stockOrder[i].id)
 
     }
-    console.log(productId)
-
 
     if (checkValidElement) {
         let firstName = document.getElementById('firstName')
@@ -153,6 +145,8 @@ document.querySelector('.cart__order__form').addEventListener('submit', function
             .then((response) => response.json())
             .then(function (data) {
                 window.location.href = `confirmation.html?id=${data.orderId}`
+                stockOrder = []
+                saveStorage(stockOrder)
             })
     }
 
