@@ -21,16 +21,6 @@ for(let i =0; i < formInputs.length; i++) {
 }
 
 /**
- * function check all input form element
- */
-const validForm = () => {
-    for(let i =0; i < formInputs.length; i++) {
-        let input = formInputs[i];
-        checkValidElement(input);
-    }
-}
-
-/**
  * function check element
  * @param element
  */

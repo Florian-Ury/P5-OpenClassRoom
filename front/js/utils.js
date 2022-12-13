@@ -107,10 +107,8 @@ const showQuantity = (targetDiv, newQuantity) => {
  * @returns {*}
  */
 const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
-    // Gérer la quantité total
     totalQuantity -= parseInt(Qty)
 
-    // Gérer le prix total
     total -= parseInt(totalDel)
 
     for (let i = 0; i < stockOrder.length; i++) {
@@ -118,14 +116,10 @@ const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
         if (stockOrder[i].personnalId === personnalId) {
             stockOrder.splice(i, 1)
 
-            //Sauvegarder le storage
             saveStorage(stockOrder)
 
-            //Afficher le prix actualisé en temps réel
             showTotalPrice(total)
 
-
-            //Afficher la quantité d'articles en temps réel
             showTotal(totalQuantity)
 
             return total
