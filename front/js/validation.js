@@ -63,6 +63,8 @@ const checkValidElement = (element) => {
     // show text
     if(result == false) {
         targetDiv.textContent = "Veuillez entrer une donnée valide";
+    }  else {
+        targetDiv.textContent = "";
     }
 
      return result
