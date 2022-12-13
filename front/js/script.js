@@ -1,4 +1,3 @@
-
 //Data recovery from API
 const products = fetch("http://localhost:3000/api/products")
     .then(function(response) {

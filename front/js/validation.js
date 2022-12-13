@@ -30,7 +30,6 @@ const validForm = () => {
     }
 }
 
-
 /**
  * function check element
  * @param element

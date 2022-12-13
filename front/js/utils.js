@@ -46,21 +46,31 @@ const saveStorage = (stockOrder) => {
  * @returns {*}
  */
 const updateToStockOrder = (order, targetDiv, price, total) => {
-    totalQuantity += parseInt(order.quantity)
-    total += parseInt(price)
+
+
 
     let exist = 0
     let newQuantity = 0
 
     for(let i = 0; i < stockOrder.length; i++) {
         if (order.personnalId === stockOrder[i].personnalId) {
-            stockOrder[i].quantity = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
-            exist = 1
-            newQuantity = stockOrder[i].quantity
+            let QtyTotal = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
+            if(QtyTotal > 0) {
+                stockOrder[i].quantity = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
+                newQuantity = stockOrder[i].quantity
+                totalQuantity += parseInt(order.quantity)
+                total += parseInt(price)
+            } else {
+                alert("Vous ne pouvez pas réduire la quantitée")
+                newQuantity = stockOrder[i].quantity
+            }
+                exist = 1
         }
     }
     if (exist === 0) {
         stockOrder.push(order)
+        totalQuantity += parseInt(order.quantity)
+        total += parseInt(price)
         newQuantity = order.quantity
     }
 
@@ -80,7 +90,6 @@ const updateToStockOrder = (order, targetDiv, price, total) => {
     }
     return total
 }
-
 /**
  * Show new quantity on the product cart
  * @param targetDiv
@@ -89,7 +98,6 @@ const updateToStockOrder = (order, targetDiv, price, total) => {
 const showQuantity = (targetDiv, newQuantity) => {
     targetDiv.innerHTML = `Qté : ${newQuantity}`
 }
-
 /**
  * Remove from stockOrder with personnalId
  * @param personnalId
@@ -99,7 +107,6 @@ const showQuantity = (targetDiv, newQuantity) => {
  * @returns {*}
  */
 const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
-
     // Gérer la quantité total
     totalQuantity -= parseInt(Qty)
 
@@ -125,7 +132,6 @@ const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
         }
     }
 }
-
 /**
  * check if value of email of form is validated
  * @param string

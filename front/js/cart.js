@@ -36,7 +36,6 @@
                     `
 
             total += a.quantity*product.price
-            console.log(total)
 
             showTotalPrice(total)
 
@@ -60,14 +59,12 @@
                     let regex = new RegExp('€')
                     let replacePrice = elementPrice.replace(regex, '')
                     let price = parseInt(replacePrice)*item.value
-
-                    console.log(total)
                     total = updateToStockOrder(personnalId, elementQuantity, price, total)
                     this.value = 0
                 })
             })
 
-            // Select the product & send it to removeToStockOrder
+            //Select the product & send it to removeToStockOrder
             let selectProduct = document.querySelectorAll(".deleteItem")
 
             selectProduct.forEach(function (item){
@@ -103,7 +100,6 @@ document.querySelector('.cart__order__form').addEventListener('submit', function
     let productId = []
 
     for (i = 0; i < stockOrder.length; i++){
-        console.log(stockOrder[i].id)
         productId.push(stockOrder[i].id)
 
     }

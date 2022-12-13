@@ -1,8 +1,6 @@
 // get "Id" from url
-
 let params = (new URL(document.location)).searchParams;
 let id = params.get('id');
-
 
 // Data recovery from api
 fetch(`http://localhost:3000/api/products/${id}`)
@@ -12,11 +10,8 @@ fetch(`http://localhost:3000/api/products/${id}`)
         }
     })
     .then(function(value) {
-
                 document.querySelector('title').innerHTML = value.name
-
                 updateProduct(value)
-
                 document.getElementById("addToCart").addEventListener("click", function (e) {
                     const order = {
                         color: document.querySelector('#colors').value,
@@ -33,7 +28,6 @@ fetch(`http://localhost:3000/api/products/${id}`)
                         alert("le produit à été ajouté au panier")
                     }
                 })
-
     });
 /**
  * Show selected product
