@@ -46,22 +46,20 @@ const saveStorage = (stockOrder) => {
  * @returns {*}
  */
 const updateToStockOrder = (order, targetDiv, price, total) => {
-
-
-
     let exist = 0
     let newQuantity = 0
 
     for(let i = 0; i < stockOrder.length; i++) {
         if (order.personnalId === stockOrder[i].personnalId) {
             let QtyTotal = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
-            if(QtyTotal > 0) {
+
+            if(QtyTotal > 0 && QtyTotal < 100) {
                 stockOrder[i].quantity = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
                 newQuantity = stockOrder[i].quantity
                 totalQuantity += parseInt(order.quantity)
                 total += parseInt(price)
             } else {
-                alert("Vous ne pouvez pas réduire la quantitée")
+                alert("la quantité sélectionné est incorrect.")
                 newQuantity = stockOrder[i].quantity
             }
                 exist = 1
@@ -71,20 +69,16 @@ const updateToStockOrder = (order, targetDiv, price, total) => {
         stockOrder.push(order)
         totalQuantity += parseInt(order.quantity)
         total += parseInt(price)
+        alert("le produit à été ajouté au panier en "+order.quantity+" fois et la couleur choisi est "+order.color);
         newQuantity = order.quantity
     }
 
     saveStorage(stockOrder)
-
-    //Afficher la quantité d'articles en temps réel
     showTotal(totalQuantity)
 
-    //S'il y a "targetDiv" alors on appel la fonction showQuantity
     if(targetDiv) {
         showQuantity(targetDiv, newQuantity)
     }
-
-    //S'il y a "total" on appel la fonction showTotalPrice
     if(total){
         showTotalPrice(total)
     }
@@ -108,7 +102,6 @@ const showQuantity = (targetDiv, newQuantity) => {
  */
 const removeToStockOrder = (personnalId, total, totalDel, Qty) => {
     totalQuantity -= parseInt(Qty)
-
     total -= parseInt(totalDel)
 
     for (let i = 0; i < stockOrder.length; i++) {

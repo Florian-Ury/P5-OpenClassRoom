@@ -7,8 +7,6 @@ formInputs.push(document.querySelector('#address'));
 formInputs.push(document.querySelector('#city'));
 formInputs.push(document.querySelector('#email'));
 
-
-
 /**
  * add event listener on all input form elements
  */

@@ -20,12 +20,11 @@ fetch(`http://localhost:3000/api/products/${id}`)
                         personnalId: value._id+document.querySelector('#colors').value
                     }
                     if (order.quantity == 0 || order.quantity > 100) {
-                        alert("Vous avez selectionné une mauvaise quantité")
+                        alert("Vous avez selectionné une mauvaise quantité");
                     } else if (order.color == "") {
-                        alert("Veuillez selectionner une couleur")
+                        alert("Veuillez sélectionner une couleur");
                     } else {
-                        updateToStockOrder(order);
-                        alert("le produit à été ajouté au panier")
+                        updateToStockOrder(order)
                     }
                 })
     });

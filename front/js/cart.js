@@ -88,9 +88,11 @@
          })
      })
 
- } else {
-     //Si aucun objet est trouvé on fait une alert
-     alert('Aucune page trouvé')
+ }
+
+ if (stockOrder == "") {
+     alert("Aucun produit dans le panier")
+     window.location.href="./index.html"
  }
 
 //Event for send the personnal data
