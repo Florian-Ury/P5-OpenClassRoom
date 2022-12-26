@@ -1,4 +1,5 @@
- if (stockOrder) {
+console.log(stockOrder)
+if (stockOrder) {
     let arrayPrice = new Object();
     let total = 0
 
@@ -83,6 +84,8 @@
 
                     total = removeToStockOrder(personnalId, total, totalDel, replaceQty)
                     article.style.display = "none";
+
+                    checkIfStockOrderExist()
                 })
             })
          })
@@ -90,10 +93,15 @@
 
  }
 
- if (stockOrder == "") {
-     alert("Aucun produit dans le panier")
-     window.location.href="./index.html"
- }
+const checkIfStockOrderExist = () => {
+    if (stockOrder == "" || stockOrder == null || stockOrder === []) {
+        alert("Aucun produit dans le panier")
+        window.location.href="./index.html"
+    }
+}
+
+checkIfStockOrderExist()
+
 
 //Event for send the personnal data
 document.querySelector('.cart__order__form').addEventListener('submit', function (event) {
