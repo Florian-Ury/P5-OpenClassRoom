@@ -27,9 +27,8 @@ const checkValidElement = (element) => {
     let number = false;
     let type = element.type;
     let name = element.name;
-    let string = element.value;
+    let string = element.value.trim();
     let targetDiv = element.nextElementSibling;
-
     //valid text
     if(type == "text") {
         // verif if name == adress
