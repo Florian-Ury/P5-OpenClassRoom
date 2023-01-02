@@ -147,7 +147,7 @@ const validText = (string, number = false) => {
     if(string.length < 4) return false;
     let rule;
     if(number == false) {
-        rule = '["{@&/[}{()*%$£€:;!?#,-<>~°._+1-9}]'; // number refused
+        rule = '["{@&/[}{()*%$£€:;!?#,<>~°._+1-9}]'; // number refused
     } else {
        rule = '["{@#&/[}{()*%$£€:;!?+<>~°_}]'; // number accepted
     }
