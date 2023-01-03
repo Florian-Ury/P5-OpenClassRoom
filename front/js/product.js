@@ -19,7 +19,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
                         id: value._id,
                         personnalId: value._id+document.querySelector('#colors').value
                     }
-                    if (order.quantity == 0 || order.quantity > 100) {
+                    if (order.quantity > 100 || order.quantity < 1) {
                         alert("Vous avez selectionné une mauvaise quantité");
                     } else if (order.color == "") {
                         alert("Veuillez sélectionner une couleur");

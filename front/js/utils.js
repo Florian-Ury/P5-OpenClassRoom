@@ -53,7 +53,7 @@ const updateToStockOrder = (order, targetDiv, price, total) => {
         if (order.personnalId === stockOrder[i].personnalId) {
             let QtyTotal = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
 
-            if(QtyTotal > 0 && QtyTotal < 100) {
+            if(QtyTotal > 0 && QtyTotal < 101) {
                 stockOrder[i].quantity = parseInt(stockOrder[i].quantity) + parseInt(order.quantity)
                 newQuantity = stockOrder[i].quantity
                 totalQuantity += parseInt(order.quantity)
